@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Consensus Distributed Lab</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Consensus Distributed Lab</h1>
+      <p>5 independent FastAPI nodes in Docker containers communicating through real HTTP messages.</p>
+    </div>
+    <div class="badge">Raft · Paxos · Zab</div>
+  </header>
+
+  <main>
+    <aside class="panel controls">
+      <label>Algorithm</label>
+      <select id="algorithm">
+        <option value="raft">Raft</option>
+        <option value="paxos">Paxos</option>
+        <option value="zab">Zab</option>
+      </select>
+
+      <label>Client Request</label>
+      <input id="requestValue" value="set x = 100" />
+
+      <button id="sendBtn" class="primary">Send Request</button>
+      <div class="row">
+        <button id="resetBtn">Reset Cluster</button>
+        <button id="refreshBtn">Refresh</button>
+      </div>
+      <div class="row">
+        <button id="raftElectBtn">Raft Election</button>
+        <button id="zabRecoverBtn">Zab Recovery</button>
+      </div>
+
+      <label>Fail / Recover Node</label>
+      <select id="nodeSelector">
+        <option>N1</option><option>N2</option><option>N3</option><option>N4</option><option>N5</option>
+      </select>
+      <div class="row">
+        <button id="failBtn" class="danger">Fail</button>
+        <button id="recoverBtn">Recover</button>
+      </div>
+
+      <section class="notes">
+        <h3>What this project demonstrates</h3>
+        <ul>
+          <li>Real HTTP calls between separate node services.</li>
+          <li>Majority quorum decisions over 5 nodes.</li>
+          <li>Protocol traces for every request.</li>
+          <li>Logical node failure and recovery.</li>
+        </ul>
+      </section>
+    </aside>
+
+    <section>
+      <div id="nodes" class="nodes"></div>
+
+      <div class="grid2">
+        <section class="panel">
+          <h2>Protocol Trace</h2>
+          <div id="trace" class="trace"></div>
+        </section>
+        <section class="panel">
+          <h2>Selected Algorithm Notes</h2>
+          <div id="algorithmNotes"></div>
+          <h3>Last API Result</h3>
+          <pre id="lastResult">No request yet.</pre>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+services:
+  gateway:
+    build: .
+    container_name: consensus-gateway
+    command: uvicorn gateway.main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    environment:
+      - CLUSTER_NODES=N1=http://node1:8001,N2=http://node2:8002,N3=http://node3:8003,N4=http://node4:8004,N5=http://node5:8005
+    volumes:
+      - .:/app
+    depends_on:
+      - node1
+      - node2
+      - node3
+      - node4
+      - node5
+
+  node1:
+    build: .
+    container_name: consensus-node1
+    command: uvicorn node_service.main:app --host 0.0.0.0 --port 8001 --reload
+    ports:
+      - "8001:8001"
+    environment:
+      - NODE_ID=N1
+      - NODE_PORT=8001
+      - PEERS=N2=http://node2:8002,N3=http://node3:8003,N4=http://node4:8004,N5=http://node5:8005
+    volumes:
+      - .:/app
+
+  node2:
+    build: .
+    container_name: consensus-node2
+    command: uvicorn node_service.main:app --host 0.0.0.0 --port 8002 --reload
+    ports:
+      - "8002:8002"
+    environment:
+      - NODE_ID=N2
+      - NODE_PORT=8002
+      - PEERS=N1=http://node1:8001,N3=http://node3:8003,N4=http://node4:8004,N5=http://node5:8005
+    volumes:
+      - .:/app
+
+  node3:
+    build: .
+    container_name: consensus-node3
+    command: uvicorn node_service.main:app --host 0.0.0.0 --port 8003 --reload
+    ports:
+      - "8003:8003"
+    environment:
+      - NODE_ID=N3
+      - NODE_PORT=8003
+      - PEERS=N1=http://node1:8001,N2=http://node2:8002,N4=http://node4:8004,N5=http://node5:8005
+    volumes:
+      - .:/app
+
+  node4:
+    build: .
+    container_name: consensus-node4
+    command: uvicorn node_service.main:app --host 0.0.0.0 --port 8004 --reload
+    ports:
+      - "8004:8004"
+    environment:
+      - NODE_ID=N4
+      - NODE_PORT=8004
+      - PEERS=N1=http://node1:8001,N2=http://node2:8002,N3=http://node3:8003,N5=http://node5:8005
+    volumes:
+      - .:/app
+
+  node5:
+    build: .
+    container_name: consensus-node5
+    command: uvicorn node_service.main:app --host 0.0.0.0 --port 8005 --reload
+    ports:
+      - "8005:8005"
+    environment:
+      - NODE_ID=N5
+      - NODE_PORT=8005
+      - PEERS=N1=http://node1:8001,N2=http://node2:8002,N3=http://node3:8003,N4=http://node4:8004
+    volumes:
+      - .:/app
