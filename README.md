@@ -775,18 +775,3 @@ This project is educational and not production-ready. Some simplifications inclu
 - The goal is to explain consensus concepts, not to build a production consensus library.
 
 ---
-
-## Suggested Report Description
-
-You can use the following description in a report or documentation:
-
-> This project implements an educational distributed consensus lab using Python, FastAPI, and Docker Compose. The system runs five independent node services that communicate using HTTP. It demonstrates three consensus protocols: Raft, Paxos, and Zab. The implementation includes leader election, quorum-based decision making, log replication, atomic broadcast, node failure and recovery, and a simple replicated key-value state machine. A gateway service and dashboard are provided to interact with the cluster and observe protocol traces in real time.
-
----
-
-## Suggested LinkedIn / GitHub Summary
-
-> I built a distributed consensus algorithms lab using Python, FastAPI, and Docker Compose. The project runs five independent node containers and demonstrates Raft, Paxos, and Zab through real HTTP communication. It includes leader election, quorum voting, log replication, atomic broadcast, node failure/recovery simulation, and a live dashboard for observing protocol traces.
-
----
-
