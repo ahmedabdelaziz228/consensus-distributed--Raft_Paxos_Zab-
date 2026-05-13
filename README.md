@@ -1,23 +1,47 @@
 # Distributed Consensus Algorithms Lab
 
+[![Python](https://img.shields.io/badge/Python-3.11-blue)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green)](https://fastapi.tiangolo.com/)
+[![Docker](https://img.shields.io/badge/Docker-Compose-blue)](https://www.docker.com/)
+[![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
+
 An educational, hands-on distributed systems project that demonstrates **Distributed Consensus** using three well-known protocols:
 
-- **Raft**
-- **Paxos**
-- **Zab - ZooKeeper Atomic Broadcast**
+- **Raft** - Leader-based consensus with log replication
+- **Paxos** - Multi-phase consensus with promise-based agreement
+- **Zab** - ZooKeeper Atomic Broadcast with primary election
 
-This project is not a single-file simulation. It runs **5 independent nodes** inside Docker containers. Each node is a separate FastAPI service, and nodes communicate with each other through real HTTP requests. This makes the consensus flow easier to observe, test, and explain through APIs and a live dashboard.
+This project is **not a single-file simulation**. It runs **5 independent nodes** inside Docker containers. Each node is a separate FastAPI service, and nodes communicate with each other through real HTTP requests. This makes the consensus flow easier to observe, test, and explain through APIs and a live dashboard.
+
+---
+
+## ⚡ Quick Start
+
+```bash
+# 1. Clone and enter the project
+cd consensus-distributed-lab
+
+# 2. Start all services (Docker required)
+docker compose up --build
+
+# 3. Open dashboard
+# Browser: http://localhost:8000
+```
+
+That's it! The dashboard shows real-time cluster status, protocol logs, and state changes.
 
 ---
 
 ## Table of Contents
 
+- [Quick Start](#-quick-start)
+- [Prerequisites & Setup](#prerequisites--setup)
 - [Project Idea](#project-idea)
 - [What This Project Demonstrates](#what-this-project-demonstrates)
+- [Algorithm Comparison](#algorithm-comparison)
 - [Architecture](#architecture)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
-- [Requirements](#requirements)
 - [How to Run](#how-to-run)
 - [Running Services](#running-services)
 - [Dashboard](#dashboard)
@@ -32,6 +56,7 @@ This project is not a single-file simulation. It runs **5 independent nodes** in
 - [Gateway API Reference](#gateway-api-reference)
 - [Node Admin API Reference](#node-admin-api-reference)
 - [Testing](#testing)
+- [Common Issues Quick Fix](#common-issues-quick-fix)
 - [Troubleshooting](#troubleshooting)
 - [Limitations](#limitations)
 - [Suggested Report Description](#suggested-report-description)
@@ -71,6 +96,17 @@ This project demonstrates important distributed systems concepts, including:
 - Node recovery simulation.
 - Protocol trace logging.
 - A simple replicated key-value state machine.
+
+### Algorithm Comparison
+
+| Aspect | Raft | Paxos | Zab |
+|---|---|---|---|
+| **Type** | Leader-based | Leaderless | Leader-based |
+| **Key Feature** | Log replication | Multi-phase consensus | Atomic broadcast |
+| **Leader** | Yes (elected) | No | Yes (primary) |
+| **Phases** | 2 (election, replication) | 2 (prepare, accept) | 3 (recovery, broadcast, commit) |
+| **Use Case** | General consensus | Decentralized agreement | Ordered delivery |
+| **Complexity** | Moderate | High | High |
 
 ---
 
@@ -135,15 +171,17 @@ The project includes a simple HTML, CSS, and JavaScript dashboard that allows us
 
 ## Tech Stack
 
-- **Python 3.11**
-- **FastAPI**
-- **Uvicorn**
-- **HTTPX**
-- **Pydantic**
-- **Docker**
-- **Docker Compose**
-- **HTML / CSS / JavaScript**
-- **Pytest**
+| Technology | Purpose | Version |
+|---|---|---|
+| **Python** | Core language | 3.11+ |
+| **FastAPI** | Web framework | 0.100+ |
+| **Uvicorn** | ASGI server | Latest |
+| **HTTPX** | HTTP client | Latest |
+| **Pydantic** | Data validation | Latest |
+| **Docker** | Containerization | 24.0+ |
+| **Docker Compose** | Orchestration | v2.20+ |
+| **HTML / CSS / JS** | Dashboard UI | ES6 |
+| **Pytest** | Testing | Latest |
 
 ---
 
@@ -190,9 +228,41 @@ consensus-distributed-lab/
 
 ---
 
-## Requirements
+## Prerequisites & Setup
 
-Before running the project, make sure you have:
+### System Requirements
+
+- **Docker Desktop** (includes Docker & Docker Compose)
+- **Terminal**: PowerShell, CMD, Git Bash, Linux Terminal, or macOS Terminal
+- **No local Python needed** — everything runs in Docker containers
+
+### Verify Your Setup
+
+Before running the project, confirm you have Docker installed:
+
+#### PowerShell / CMD
+```powershell
+docker --version
+docker compose version
+```
+
+#### Linux / macOS / Git Bash
+```bash
+docker --version
+docker compose version
+```
+
+**Expected output:**
+```
+Docker version 24.0.0 or higher
+Docker Compose version v2.20.0 or higher
+```
+
+If not installed, download [Docker Desktop](https://www.docker.com/products/docker-desktop).
+
+---
+
+## Requirements
 
 - Docker Desktop
 - Docker Compose
@@ -204,47 +274,52 @@ You do **not** need to install Python locally if you run the project using Docke
 
 ## How to Run
 
-### 1. Open a terminal inside the project folder
+### 1. Navigate to the project folder
 
-Example on Windows:
-
+**Windows PowerShell/CMD:**
 ```powershell
-cd "C:\Users\lap shop\Downloads\consensus-distributed-lab-python\consensus-distributed-lab"
+cd "C:\path\to\consensus-distributed-lab"
 ```
 
-### 2. Start the project
+**Linux/macOS/Git Bash:**
+```bash
+cd ~/path/to/consensus-distributed-lab
+```
+
+### 2. Start the services
 
 ```bash
 docker compose up --build
 ```
 
-If your Docker installation uses the old Compose command, use:
-
-```bash
-docker-compose up --build
+**Expected output (after ~30 seconds):**
+```
+gateway-1      | INFO:     Uvicorn running on http://0.0.0.0:8000
+node-N1-1      | INFO:     Uvicorn running on http://0.0.0.0:8001
+node-N2-1      | INFO:     Uvicorn running on http://0.0.0.0:8002
+node-N3-1      | INFO:     Uvicorn running on http://0.0.0.0:8003
+node-N4-1      | INFO:     Uvicorn running on http://0.0.0.0:8004
+node-N5-1      | INFO:     Uvicorn running on http://0.0.0.0:8005
 ```
 
 ### 3. Open the dashboard
 
-Open your browser and go to:
-
-```text
+Open your browser and visit:
+```
 http://localhost:8000
 ```
 
+You should see a live dashboard with cluster status, node health, and protocol events.
+
 ### 4. Stop the project
 
-In the same terminal, press:
-
-```text
-Ctrl + C
-```
-
-Then run:
+Press `Ctrl + C` in the terminal, then run:
 
 ```bash
 docker compose down
 ```
+
+**Troubleshooting start issues?** See the [Troubleshooting](#troubleshooting) section below.
 
 ---
 
@@ -713,6 +788,19 @@ Or locally, if dependencies are installed:
 ```bash
 pytest
 ```
+
+---
+
+## Common Issues Quick Fix
+
+| Issue | Solution |
+|---|---|
+| **Port already in use** | `docker compose down` then `docker compose up --build` |
+| **Docker not running** | Open Docker Desktop |
+| **`curl` error in PowerShell** | Use `Invoke-RestMethod` or `curl.exe` instead |
+| **Changes not reflected** | `docker compose up --build` (without cache) |
+| **Containers won't start** | Check Docker is running, then `docker compose logs` |
+| **Permission denied (Linux/Mac)** | Add `sudo` or follow [Docker post-install steps](https://docs.docker.com/engine/install/linux-postinstall/) |
 
 ---
 
