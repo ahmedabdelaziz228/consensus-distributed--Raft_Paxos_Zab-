@@ -790,12 +790,3 @@ You can use the following description in a report or documentation:
 
 ---
 
-## Author Notes
-
-This project is suitable as:
-
-- A Distributed Systems course project.
-- A practical lab for consensus algorithms.
-- A GitHub portfolio project.
-- A demonstration project for FastAPI and Docker Compose.
-- A base project that can be extended later with persistence, network partition simulation, stronger visualization, or additional protocols.
